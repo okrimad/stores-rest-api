@@ -7,7 +7,7 @@ from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
-
+# uwsgi is loading the app variable and running itself
 app = Flask(__name__)
 
 # We tell SQLAlchemy that our databse is at the root folder of our project.
@@ -21,12 +21,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.secret_key = 'mirko'
 api = Api(app)
-
-# Before first request, SQLAlchemy creates:
-# db file and tables unless they exist already.
-@app.before_first_request
-def create_tables():
-    db.create_all()
 
 # JWT creates a new end point: /auth
 # When we call /auth => we send username+password.
@@ -55,6 +49,7 @@ api.add_resource(StoreList, '/stores')			# End point
 # http://127.0.0.1:5000/register
 api.add_resource(UserRegister, '/register')		# End point
 
+# The following code runs when we directly execute app.py using python cmd
 if __name__ == '__main__':
     # Circular import
     from db import db
