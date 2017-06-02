@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
@@ -10,8 +12,10 @@ from resources.store import Store, StoreList
 # uwsgi is loading the app variable and running itself
 app = Flask(__name__)
 
-# We tell SQLAlchemy that our databse is at the root folder of our project.
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+# Get method accepts and taking 2 parameters:
+# 1) By using the environment variable, we can access Heroku PostgreSQL.
+# 2) Default value: local sqlite db.
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
 
 # Turn off Flask SQLAlchemy modifications tracker, but
 # this does NOT turn off the SQLAlchemy modifications tracker.
